@@ -1,4 +1,4 @@
-script: "/example/examples/general/layout/layout.gui_script"
+script: "/example/examples/layout/layout_resize/layout_resize.gui_script"
 fonts {
   name: "game"
   font: "/example/assets/fonts/game.font"
@@ -51,7 +51,7 @@ nodes {
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   layer: ""
   inherit_alpha: true
   slice9 {
@@ -74,7 +74,7 @@ nodes {
 nodes {
   position {
     x: 0.0
-    y: 250.0
+    y: 0.0
     z: 0.0
     w: 1.0
   }
@@ -105,11 +105,11 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: "kenney/slider_move"
-  id: "node_stretch"
+  id: "test"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "root"
   layer: ""
   inherit_alpha: true
@@ -132,75 +132,8 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 0.65
-    y: 0.65
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 450.0
-    y: 100.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
-  text: "Regular Stretch Mode"
-  font: "game"
-  id: "text_regular"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
-  outline {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  shadow {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  adjust_mode: ADJUST_MODE_FIT
-  line_break: false
-  parent: "node_stretch"
-  layer: ""
-  inherit_alpha: true
-  alpha: 1.0
-  outline_alpha: 1.0
-  shadow_alpha: 0.0
-  template_node_child: false
-  text_leading: 1.0
-  text_tracking: 0.0
-  custom_type: 0
-  enabled: true
-  visible: true
-  material: ""
-}
-nodes {
-  position {
-    x: 0.0
-    y: 100.0
+    x: -120.0
+    y: 30.0
     z: 0.0
     w: 1.0
   }
@@ -217,8 +150,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 300.0
-    y: 100.0
+    x: 24.0
+    y: 24.0
     z: 0.0
     w: 1.0
   }
@@ -230,20 +163,20 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: "kenney/slider_move"
-  id: "node_layout_stretch"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
+  texture: ""
+  id: "box_nw"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "root"
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "test"
   layer: ""
   inherit_alpha: true
   slice9 {
-    x: 17.0
-    y: 17.0
-    z: 17.0
-    w: 17.0
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
   }
   clipping_mode: CLIPPING_MODE_NONE
   clipping_visible: true
@@ -259,74 +192,7 @@ nodes {
 nodes {
   position {
     x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 0.65
-    y: 0.65
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 450.0
-    y: 100.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
-  text: "Layout Stretch"
-  font: "game"
-  id: "text_layout_stretch"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
-  outline {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  shadow {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  adjust_mode: ADJUST_MODE_FIT
-  line_break: false
-  parent: "node_layout_stretch"
-  layer: ""
-  inherit_alpha: true
-  alpha: 1.0
-  outline_alpha: 1.0
-  shadow_alpha: 0.0
-  template_node_child: false
-  text_leading: 1.0
-  text_tracking: 0.0
-  custom_type: 0
-  enabled: true
-  visible: true
-  material: ""
-}
-nodes {
-  position {
-    x: 0.0
-    y: -50.0
+    y: 30.0
     z: 0.0
     w: 1.0
   }
@@ -343,8 +209,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 300.0
-    y: 100.0
+    x: 24.0
+    y: 24.0
     z: 0.0
     w: 1.0
   }
@@ -356,20 +222,20 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: "kenney/slider_move"
-  id: "node_layout_stretch_x"
+  texture: ""
+  id: "box_n"
   xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "root"
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "test"
   layer: ""
   inherit_alpha: true
   slice9 {
-    x: 17.0
-    y: 17.0
-    z: 17.0
-    w: 17.0
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
   }
   clipping_mode: CLIPPING_MODE_NONE
   clipping_visible: true
@@ -384,75 +250,8 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 0.65
-    y: 0.65
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 450.0
-    y: 100.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
-  text: "Layout Stretch by X"
-  font: "game"
-  id: "text_layout_stretch1"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
-  outline {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  shadow {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  adjust_mode: ADJUST_MODE_FIT
-  line_break: false
-  parent: "node_layout_stretch_x"
-  layer: ""
-  inherit_alpha: true
-  alpha: 1.0
-  outline_alpha: 1.0
-  shadow_alpha: 0.0
-  template_node_child: false
-  text_leading: 1.0
-  text_tracking: 0.0
-  custom_type: 0
-  enabled: true
-  visible: true
-  material: ""
-}
-nodes {
-  position {
-    x: 0.0
-    y: -200.0
+    x: 120.0
+    y: 30.0
     z: 0.0
     w: 1.0
   }
@@ -469,8 +268,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 300.0
-    y: 100.0
+    x: 24.0
+    y: 24.0
     z: 0.0
     w: 1.0
   }
@@ -482,20 +281,20 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: "kenney/slider_move"
-  id: "node_layout_stretch_y"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
+  texture: ""
+  id: "box_ne"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "root"
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "test"
   layer: ""
   inherit_alpha: true
   slice9 {
-    x: 17.0
-    y: 17.0
-    z: 17.0
-    w: 17.0
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
   }
   clipping_mode: CLIPPING_MODE_NONE
   clipping_visible: true
@@ -510,75 +309,8 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
+    x: -120.0
     y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 0.65
-    y: 0.65
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 450.0
-    y: 100.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
-  text: "Layout Stretch by Y"
-  font: "game"
-  id: "text_layout_stretch2"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
-  outline {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  shadow {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  adjust_mode: ADJUST_MODE_FIT
-  line_break: false
-  parent: "node_layout_stretch_y"
-  layer: ""
-  inherit_alpha: true
-  alpha: 1.0
-  outline_alpha: 1.0
-  shadow_alpha: 0.0
-  template_node_child: false
-  text_leading: 1.0
-  text_tracking: 0.0
-  custom_type: 0
-  enabled: true
-  visible: true
-  material: ""
-}
-nodes {
-  position {
-    x: -250.0
-    y: -350.0
     z: 0.0
     w: 1.0
   }
@@ -595,8 +327,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 300.0
-    y: 100.0
+    x: 24.0
+    y: 24.0
     z: 0.0
     w: 1.0
   }
@@ -608,20 +340,20 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: "kenney/slider_move"
-  id: "node_layout_stretch_y_anchor_w"
-  xanchor: XANCHOR_NONE
+  texture: ""
+  id: "box_w"
+  xanchor: XANCHOR_LEFT
   yanchor: YANCHOR_NONE
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "root"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "test"
   layer: ""
   inherit_alpha: true
   slice9 {
-    x: 17.0
-    y: 17.0
-    z: 17.0
-    w: 17.0
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
   }
   clipping_mode: CLIPPING_MODE_NONE
   clipping_visible: true
@@ -636,7 +368,7 @@ nodes {
 }
 nodes {
   position {
-    x: 150.0
+    x: 0.0
     y: 0.0
     z: 0.0
     w: 1.0
@@ -648,14 +380,14 @@ nodes {
     w: 1.0
   }
   scale {
-    x: 0.65
-    y: 0.65
+    x: 1.0
+    y: 1.0
     z: 1.0
     w: 1.0
   }
   size {
-    x: 450.0
-    y: 100.0
+    x: 24.0
+    y: 24.0
     z: 0.0
     w: 1.0
   }
@@ -665,37 +397,265 @@ nodes {
     z: 1.0
     w: 1.0
   }
-  type: TYPE_TEXT
+  type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  text: "Layout Stretch by X Anchor W"
-  font: "game"
-  id: "text_layout_stretch3"
+  texture: ""
+  id: "box_c"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
-  outline {
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "test"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: false
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: true
+  material: ""
+}
+nodes {
+  position {
+    x: 120.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
     x: 0.0
     y: 0.0
     z: 0.0
     w: 1.0
   }
-  shadow {
+  scale {
     x: 1.0
     y: 1.0
     z: 1.0
     w: 1.0
   }
+  size {
+    x: 24.0
+    y: 24.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "box_e"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
-  line_break: true
-  parent: "node_layout_stretch_y_anchor_w"
+  parent: "test"
   layer: ""
   inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
   alpha: 1.0
-  outline_alpha: 1.0
-  shadow_alpha: 0.0
   template_node_child: false
-  text_leading: 1.0
-  text_tracking: 0.0
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: true
+  material: ""
+}
+nodes {
+  position {
+    x: -120.0
+    y: -30.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 24.0
+    y: 24.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "box_sw"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "test"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: false
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: true
+  material: ""
+}
+nodes {
+  position {
+    x: 0.0
+    y: -30.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 24.0
+    y: 24.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "box_s"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "test"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: false
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: true
+  material: ""
+}
+nodes {
+  position {
+    x: 120.0
+    y: -30.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 24.0
+    y: 24.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "box_se"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "test"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: false
+  size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
   visible: true

@@ -57,6 +57,31 @@ M.PIVOTS = {
 	[gui.PIVOT_NW] = vmath.vector3(-0.5, 0.5, 0),
 }
 
+
+M.CORNER_PIVOTS = {
+	gui.PIVOT_NE,
+	gui.PIVOT_NW,
+	gui.PIVOT_SE,
+	gui.PIVOT_SW,
+}
+
+
+M.CORNER_PIVOTS_TO_ANCHOR_X = {
+	[gui.PIVOT_NE] = gui.ANCHOR_RIGHT,
+	[gui.PIVOT_SE] = gui.ANCHOR_RIGHT,
+	[gui.PIVOT_NW] = gui.ANCHOR_LEFT,
+	[gui.PIVOT_SW] = gui.ANCHOR_LEFT,
+}
+
+
+M.CORNER_PIVOTS_TO_ANCHOR_Y = {
+	[gui.PIVOT_NE] = gui.ANCHOR_TOP,
+	[gui.PIVOT_SE] = gui.ANCHOR_BOTTOM,
+	[gui.PIVOT_NW] = gui.ANCHOR_TOP,
+	[gui.PIVOT_SW] = gui.ANCHOR_BOTTOM,
+}
+
+
 M.REVERSE_PIVOTS = {
 	[gui.PIVOT_CENTER] = gui.PIVOT_CENTER,
 	[gui.PIVOT_N] = gui.PIVOT_S,
@@ -69,6 +94,14 @@ M.REVERSE_PIVOTS = {
 	[gui.PIVOT_NW] = gui.PIVOT_SE,
 }
 
+
+M.ANCHORS = {
+	[gui.ANCHOR_LEFT] = vmath.vector3(-1, 1, 0), -- Equals to ANCHOR_TOP
+	[gui.ANCHOR_RIGHT] = vmath.vector3(1, -1, 0), -- Equals to ANCHOR_BOTTOM
+	[gui.ANCHOR_NONE] = vmath.vector3(0, 0, 0),
+}
+
+
 M.LAYOUT_MODE = {
 	STRETCH_X = "stretch_x",
 	STRETCH_Y = "stretch_y",
@@ -79,6 +112,7 @@ M.LAYOUT_MODE = {
 }
 
 M.VECTOR_ZERO = vmath.vector3(0)
+M.TEMP_VECTOR = vmath.vector3(0)
 M.SYS_INFO = sys.get_sys_info()
 M.CURRENT_SYSTEM_NAME = M.SYS_INFO.system_name
 

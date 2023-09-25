@@ -181,4 +181,9 @@ M["rich_text"] = {
 }
 
 
+M["layout"] = {
+	DRAGGABLE_CORNER_SIZE = vmath.vector3(24, 24, 0),
+	DRAGGABLE_CORNER_COLOR = vmath.vector4(1, 1, 1, 1),
+}
+
 return M

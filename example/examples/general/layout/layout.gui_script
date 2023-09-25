@@ -1,4 +1,5 @@
 local druid = require("druid.druid")
+local helper = require("druid.helper")
 local const_druid = require("druid.const")
 local layout = require("druid.extended.layout")
 

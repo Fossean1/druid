@@ -1,0 +1,151 @@
+local druid = require("druid.druid")
+local const_druid = require("druid.const")
+local helper = require("druid.helper")
+local layout = require("druid.extended.layout")
+
+
+local PIVOTS = {
+	vmath.vector3(-0.5, 0.5, 0),
+	vmath.vector3(0.5, 0.5, 0),
+	vmath.vector3(-0.5, -0.5, 0),
+	vmath.vector3(0.5, -0.5, 0),
+}
+
+
+local function add_child(self, box_id, parent_node)
+	local node = gui.get_node(box_id)
+	self._childrens = self._childrens or {}
+
+	table.insert(self._childrens, {
+		node = node,
+		init_pos = gui.get_position(node),
+		init_size = gui.get_size(node),
+		adjust_mode = gui.get_adjust_mode(node),
+		x_anchor = gui.get_xanchor(node),
+		y_anchor = gui.get_yanchor(node),
+		parent = parent_node,
+		parent_size = gui.get_size(parent_node),
+	})
+
+	gui.set_adjust_mode(node, gui.ADJUST_FIT)
+end
+
+
+local ANCHORS = {
+	[gui.ANCHOR_LEFT] = vmath.vector3(-1, 1, 0),
+	[gui.ANCHOR_RIGHT] = vmath.vector3(1, -1, 0),
+	[gui.ANCHOR_NONE] = vmath.vector3(0, 0, 0),
+	[gui.ANCHOR_TOP] = vmath.vector3(-1, 1, 0),
+	[gui.ANCHOR_BOTTOM] = vmath.vector3(1, -1, 0),
+}
+
+local function update_childrens(self)
+	for index = 1, #self._childrens do
+		local child = self._childrens[index]
+		local node = child.node
+
+		--- Position update (for FIT)
+		local pos = vmath.vector3(child.init_pos)
+		local x_koef = ANCHORS[child.x_anchor].x
+		local y_koef = ANCHORS[child.y_anchor].y
+
+		local current_parent_size = gui.get_size(child.parent)
+		local right_offset = child.parent_size.x/2 - (pos.x * x_koef)
+
+		if x_koef ~= 0 then
+			pos.x = ((current_parent_size.x/2) - right_offset) * x_koef
+		end
+
+		local top_offset = child.parent_size.y/2 - (pos.y * y_koef)
+
+		if y_koef ~= 0 then
+			pos.y = ((current_parent_size.y/2) - top_offset) * y_koef
+		end
+
+		gui.set_position(node, pos)
+
+
+		-- Size Update (for stretch)
+		if child.adjust_mode == gui.ADJUST_STRETCH then
+			local size = vmath.vector3(child.init_size)
+			local stretch_side_x = child.parent_size.x
+			if x_koef ~= 0 then
+				-- -100 -75 -50 -25 0 25 50 75 100
+				stretch_side_x = child.parent_size.x - (child.parent_size.x/2 - (child.init_pos.x * x_koef))
+			end
+
+			-- Perc of stretch side:
+			local fill_perc = vmath.vector3(
+				child.init_size.x / stretch_side_x,
+				child.init_size.y / child.parent_size.y,
+				0
+			)
+
+			size.x = current_parent_size.x * fill_perc.x
+			size.y = current_parent_size.y * fill_perc.y
+			gui.set_size(node, size)
+		end
+	end
+end
+
+
+
+function init(self)
+	druid.register("layout", layout)
+	self.druid = druid.new(self)
+
+	self._childrens = {}
+	local node = gui.get_node("test")
+	local layout_instance = self.druid:new_layout(node)
+	layout_instance:create_draggable_corners()
+	layout_instance:add_anchor("box_nw")
+	layout_instance:add_anchor("box_n")
+	layout_instance:add_anchor("box_ne")
+	layout_instance:add_anchor("box_w")
+	layout_instance:add_anchor("box_c")
+	layout_instance:add_anchor("box_e")
+	layout_instance:add_anchor("box_sw")
+	layout_instance:add_anchor("box_s")
+	layout_instance:add_anchor("box_se")
+
+	--add_child(self, "box", node)
+	--add_child(self, "box1", node)
+	--add_child(self, "box2", node)
+
+	--self.druid:new_drag(node, function(_, x, y)
+	--	x = -x
+	--	local position = gui.get_position(node)
+	--	local center_pos = position
+
+	--	local pivot = gui.get_pivot(node)
+	--	local pivot_offset = helper.get_pivot_offset(pivot)
+
+	--	-- Right side
+	--	center_pos.x = center_pos.x - (x * (0.5 + pivot_offset.x))
+	--	gui.set_position(node, center_pos)
+
+	--	local size = gui.get_size(node)
+	--	size.x = size.x - x
+	--	gui.set_size(node, size)
+	--end)
+end
+
+
+function final(self)
+	self.druid:final()
+end
+
+
+function update(self, dt)
+	self.druid:update(dt)
+end
+
+
+function on_message(self, message_id, message, sender)
+	self.druid:on_message(message_id, message, sender)
+end
+
+
+function on_input(self, action_id, action)
+	return self.druid:on_input(action_id, action)
+end
