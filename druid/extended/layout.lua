@@ -47,6 +47,10 @@ function Layout.init(self, node, mode, on_size_changed_callback)
 	self._anchors = {}
 	self._draggable_corners = {}
 
+	local node_size = gui.get_size(self.node)
+	self.pivot_offset = helper.get_pivot_offset(gui.get_pivot(self.node))
+	self.center_offset = -vmath.vector3(node_size.x * self.pivot_offset.x, node_size.y * self.pivot_offset.y, 0)
+
 	self.mode = mode or const.LAYOUT_MODE.FIT
 
 	self.on_size_changed = Event(on_size_changed_callback)
@@ -58,7 +62,7 @@ function Layout.on_late_init(self)
 	self.origin_size = self.origin_size or gui.get_size(self.node)
 	self.fit_size = self.fit_size or vmath.vector3(self.origin_size)
 	self.pivot_offset = helper.get_pivot_offset(gui.get_pivot(self.node))
-	self.center_offset = vmath.vector3(self.origin_size.x * self.pivot_offset.x, self.origin_size.y * self.pivot_offset.y, 0)
+	self.center_offset = -vmath.vector3(self.origin_size.x * self.pivot_offset.x, self.origin_size.y * self.pivot_offset.y, 0)
 	self.origin_position = gui.get_position(self.node)
 	self.position = vmath.vector3(self.origin_position)
 	gui.set_size_mode(self.node, gui.SIZE_MODE_MANUAL)
@@ -128,9 +132,9 @@ function Layout.on_window_resized(self)
 		new_size = new_size * math.max(x_koef, y_koef)
 	end
 
-	self.position.x = self.origin_position.x + self.origin_position.x * (x_koef - 1)
-	self.position.y = self.origin_position.y + self.origin_position.y * (y_koef - 1)
-	gui.set_position(self.node, self.position)
+	--self.position.x = self.origin_position.x + self.origin_position.x * (x_koef - 1)
+	--self.position.y = self.origin_position.y + self.origin_position.y * (y_koef - 1)
+	--gui.set_position(self.node, self.position)
 
 	self:set_size(new_size)
 end
@@ -161,6 +165,10 @@ end
 -- @tparam vector3 size
 -- @treturn Layout @{Layout}
 function Layout.set_size(self, size)
+	if not self._inited then
+		return
+	end
+
 	local new_size = const.TEMP_VECTOR
 	new_size.x = size.x
 	new_size.y = size.y
@@ -170,14 +178,18 @@ function Layout.set_size(self, size)
 		new_size.x = math.max(new_size.x, self._min_size.x)
 		new_size.y = math.max(new_size.y, self._min_size.y)
 	end
+
 	if self._max_size then
 		new_size.x = math.min(new_size.x, self._max_size.x)
 		new_size.y = math.min(new_size.y, self._max_size.y)
 	end
 
-	gui.set_size(self.node, new_size)
+	self.center_offset = -vmath.vector3(new_size.x * self.pivot_offset.x, new_size.y * self.pivot_offset.y, 0)
 	self._current_size = new_size
+	gui.set_size(self.node, new_size)
+
 	self:update_anchors()
+
 	self.on_size_changed:trigger(self:get_context(), new_size)
 
 	return self
@@ -250,21 +262,35 @@ end
 
 
 -- @tparam Layout self @{Layout}
--- @treturn Layout @{Layout}
+-- @treturn Layout @{Layout} New created layout instance
 function Layout.add_anchor(self, node)
 	node = self:get_node(node)
+	local parent_size = gui.get_size(self.node)
+	local init_position = gui.get_position(node)
+	init_position.x = init_position.x - self.center_offset.x
+	init_position.y = init_position.y - self.center_offset.y
+
+	local side_offset = vmath.vector4( -- left top right bottom
+		parent_size.x/2 + init_position.x,
+		parent_size.y/2 - init_position.y,
+		parent_size.x/2 - init_position.x,
+		parent_size.y/2 + init_position.y
+	)
+
+	local anchor_layout = self.druid:new_layout(node)
 	table.insert(self._anchors, {
 		node = node,
-		init_position = gui.get_position(node),
+		layout = anchor_layout,
+		init_position = init_position,
+		pivot = gui.get_pivot(node),
 		init_size = gui.get_size(node),
 		adjust_mode = gui.get_adjust_mode(node),
-		x_anchor = gui.get_xanchor(node),
-		y_anchor = gui.get_yanchor(node),
-		parent_size = gui.get_size(self.node),
+		parent_size = parent_size,
+		side_offset = side_offset,
 	})
 
 	gui.set_adjust_mode(node, gui.ADJUST_FIT)
-	return self
+	return anchor_layout
 end
 
 
@@ -275,6 +301,7 @@ function Layout.remove_anchor(self, node)
 		local anchor = self._anchors[index]
 		if anchor.node == node then
 			table.remove(self._anchors, index)
+			self.druid:remove(anchor.layout)
 			return
 		end
 	end
@@ -296,41 +323,44 @@ function Layout.update_anchors(self)
 
 		--- Position update (for FIT)
 		local pos = vmath.vector3(child.init_position)
-		local x_koef = const.ANCHORS[child.x_anchor].x
-		local y_koef = const.ANCHORS[child.y_anchor].y
+		pos.x = pos.x + self.center_offset.x
+		pos.y = pos.y + self.center_offset.y
+		local pivot = child.pivot
+		local pivot_offset = helper.get_pivot_offset(pivot)
 
-		local right_offset = child.parent_size.x/2 - (pos.x * x_koef)
+		local stretch_side_x = self._current_size.x
+		local stretch_side_y = self._current_size.y
+		local fill_perc_x = child.init_size.x / child.parent_size.x
+		local fill_perc_y = child.init_size.y / child.parent_size.y
 
-		if x_koef ~= 0 then
-			pos.x = ((self._current_size.x/2) - right_offset) * x_koef
+		if pivot_offset.x < 0 then -- left
+			pos.x = self.center_offset.x - self._current_size.x/2 + child.side_offset.x
+			stretch_side_x = self._current_size.x - child.side_offset.x
+			fill_perc_x = child.init_size.x / (child.parent_size.x - child.side_offset.x)
 		end
-
-		local top_offset = child.parent_size.y/2 - (pos.y * y_koef)
-
-		if y_koef ~= 0 then
-			pos.y = ((self._current_size.y/2) - top_offset) * y_koef
+		if pivot_offset.y > 0 then -- top
+			pos.y = self.center_offset.y + self._current_size.y/2 - child.side_offset.y
+			stretch_side_y = self._current_size.y - child.side_offset.y
+			fill_perc_y = child.init_size.y / (child.parent_size.y - child.side_offset.y)
 		end
-
+		if pivot_offset.x > 0 then -- right
+			pos.x = self.center_offset.x + self._current_size.x/2 - child.side_offset.z
+			stretch_side_x = self._current_size.x - child.side_offset.z
+			fill_perc_x = child.init_size.x / (child.parent_size.x - child.side_offset.z)
+		end
+		if pivot_offset.y < 0 then -- bottom
+			pos.y = self.center_offset.y - self._current_size.y/2 + child.side_offset.w
+			stretch_side_y = self._current_size.y - child.side_offset.w
+			fill_perc_y = child.init_size.y / (child.parent_size.y - child.side_offset.w)
+		end
 		gui.set_position(node, pos)
 
 		-- Size Update (for stretch)
 		if child.adjust_mode == gui.ADJUST_STRETCH then
 			local size = vmath.vector3(child.init_size)
-			local stretch_side_x = child.parent_size.x
-			if x_koef ~= 0 then
-				stretch_side_x = child.parent_size.x - (child.parent_size.x/2 - (child.init_position.x * x_koef))
-			end
-
-			-- Perc of stretch side:
-			local fill_perc = vmath.vector3(
-				child.init_size.x / stretch_side_x,
-				child.init_size.y / child.parent_size.y,
-				0
-			)
-
-			size.x = self._current_size.x * fill_perc.x
-			size.y = self._current_size.y * fill_perc.y
-			gui.set_size(node, size)
+			size.x = stretch_side_x * fill_perc_x
+			size.y = stretch_side_y * fill_perc_y
+			child.layout:set_size(size)
 		end
 	end
 end
@@ -340,6 +370,7 @@ end
 -- @treturn Layout @{Layout}
 function Layout.create_draggable_corners(self)
 	self:clear_draggable_corners()
+
 	local node_size = gui.get_size(self.node)
 	self.pivot_offset = helper.get_pivot_offset(gui.get_pivot(self.node))
 	self.center_offset = -vmath.vector3(node_size.x * self.pivot_offset.x, node_size.y * self.pivot_offset.y, 0)
@@ -353,8 +384,7 @@ function Layout.create_draggable_corners(self)
 
 		local new_draggable_node = gui.new_box_node(anchor_position, self.style.DRAGGABLE_CORNER_SIZE)
 		gui.set_parent(new_draggable_node, self.node)
-		gui.set_xanchor(new_draggable_node, const.CORNER_PIVOTS_TO_ANCHOR_X[corner_pivot] or gui.ANCHOR_NONE)
-		gui.set_yanchor(new_draggable_node, const.CORNER_PIVOTS_TO_ANCHOR_Y[corner_pivot] or gui.ANCHOR_NONE)
+		gui.set_pivot(new_draggable_node, corner_pivot)
 
 		self:add_anchor(new_draggable_node)
 		table.insert(self._draggable_corners, new_draggable_node)
